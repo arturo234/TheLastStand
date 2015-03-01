@@ -14,33 +14,48 @@ public class PlayerController : MonoBehaviour{
 	
 	void Update(){
 		//WASD Controls
-		
+		Vector3 horizontal = new Vector3(walkSpeed * Time.deltaTime, 0.0f, 0.0f);//player's horizontal vector
+		Vector3 vertical = new Vector3(0.0f,walkSpeed * Time.deltaTime, 0.0f);//player's vertical vector
+
 		if (Input.GetKey (KeyCode.D)) {
-			transform.position += new Vector3 (walkSpeed * Time.deltaTime, 0.0f, 0.0f);
+			transform.position += horizontal;
 		} 
 		if (Input.GetKey (KeyCode.A)) {
-			transform.position -= new Vector3 (walkSpeed * Time.deltaTime, 0.0f, 0.0f);
+			transform.position -= horizontal;
 		} 
 		if (Input.GetKey (KeyCode.W)) {
-			transform.position += new Vector3 (0.0f,walkSpeed * Time.deltaTime, 0.0f);
+			transform.position += vertical;
 		} 
 		if (Input.GetKey (KeyCode.S)) {
-			transform.position -= new Vector3 (0.0f,walkSpeed * Time.deltaTime, 0.0f);
+			transform.position -= vertical;
 		}
 		
 		//arrow key controls 
 		
 		if (Input.GetKey (KeyCode.RightArrow)) {
-			transform.position += new Vector3 (walkSpeed * Time.deltaTime, 0.0f, 0.0f);
+			transform.position += horizontal;
 		} 
 		if (Input.GetKey (KeyCode.LeftArrow)) {
-			transform.position -= new Vector3 (walkSpeed * Time.deltaTime, 0.0f, 0.0f);
+			transform.position -= horizontal;
 		} 
 		if (Input.GetKey (KeyCode.UpArrow)) {
-			transform.position += new Vector3 (0.0f,walkSpeed * Time.deltaTime, 0.0f);
+			transform.position += vertical;
 		} 
 		if (Input.GetKey (KeyCode.DownArrow)) {
-			transform.position -= new Vector3 (0.0f,walkSpeed * Time.deltaTime, 0.0f);
+			transform.position -= vertical;
 		}
+	
+		//Mouse Aiming 
+
+		Vector3 mousePosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 8);//mouse's position
+
+		Vector3 lookPosition = Camera.main.ScreenToWorldPoint(mousePosition);//player's position
+
+		lookPosition = lookPosition - transform.position;
+
+		float angle = Mathf.Atan2(lookPosition.y, lookPosition.x) * Mathf.Rad2Deg;
+		transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+
+	
 	}
 }
