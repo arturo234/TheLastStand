@@ -8,7 +8,7 @@ public class PlayerRespawn : MonoBehaviour
 		}
 		// Update is called once per frame
 		void Update (){
-			if(Input.GetKey (KeyCode.R)){
+			if(Input.GetKey (KeyCode.R)){				//Replace with an actual trigger i.e. Death
 				var player = GameObject.Find("Player");
 				var spawnpoint = GameObject.FindWithTag ("Respawn").transform;
 				player.transform.position = spawnpoint.position;
