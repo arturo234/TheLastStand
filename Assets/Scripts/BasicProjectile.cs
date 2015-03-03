@@ -14,6 +14,9 @@ public class BasicProjectile : MonoBehaviour, IPoolableObject
     private double timeSpawned;
     private double selfDestructTime;
     private double currentTime;
+    private bool active;
+
+    private ObjectPool pool;
 
     private GenericCharacter firingEntity;
 
@@ -28,17 +31,25 @@ public class BasicProjectile : MonoBehaviour, IPoolableObject
 	void Update () 
     {
         currentTime += Time.deltaTime;
-        if (currentTime + timeSpawned >= timeSpawned + selfDestructTime)
+        if (currentTime + timeSpawned >= timeSpawned + selfDestructTime && active)
         {
             firingEntity.DestroyProjectile(this.gameObject);
+            active = false;
+            Debug.Log("Arrow destroyed!");
         }
 	}
 
-    public void SpawnArrow(double time, GenericCharacter entity)
+    public void SpawnArrow(double time, GenericCharacter entity, ObjectPool pool)
     {
+        Debug.Log("Arrow fired!");
         timeSpawned = time;
         currentTime = 0f;
-
+        active = true;
         firingEntity = entity;
+    }
+
+    public void RemoveArrow()
+    {
+        firingEntity.DestroyProjectile(this.gameObject);
     }
 }

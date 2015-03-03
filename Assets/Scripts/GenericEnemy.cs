@@ -3,6 +3,7 @@ using System.Collections;
 
 public class GenericEnemy : GenericCharacter {
 
+    public ObjectPool projectilePool;
 
 
 	// Use this for initialization
@@ -30,17 +31,31 @@ public class GenericEnemy : GenericCharacter {
 		}
 	}
 
+    public override void ProjectileUpDate()
+    {
+        GameObject arrow = projectilePool.PullObject();
+        arrow.transform.position = transform.position;
+        arrow.transform.rotation = transform.rotation;
+        arrow.GetComponent<BasicProjectile>().SpawnArrow(Time.time, this, projectilePool);
+        arrow.SetActive(true);
+        arrow.rigidbody2D.velocity = arrowDir * arrowVelocity;
+    }
+
+    public override void DestroyProjectile(GameObject objToDestroy)
+    {
+        objToDestroy.rigidbody2D.velocity = Vector2.zero;
+        projectilePool.PushObject(objToDestroy.gameObject.GetComponent(typeof(IPoolableObject)) as IPoolableObject);
+    }
+
 
 	
-	public override void OnTriggerEnter2D(Collider2D col) 
+	public void OnTriggerEnter2D(Collider2D col) 
     {
-        if (!col.tag.Equals("Enemy")) //Incase of non hero hits. 
-            // Messy, there will be an internal Action to handle objects going back to the pool OnDisable
-            DestroyProjectile(col.gameObject);
+        if (col.tag == "EnemyArrow") return;
 		if (col.gameObject.tag.Equals("PlayerArrow")) 
 		{
 			health--;
-			DestroyProjectile(col.gameObject);
+            col.rigidbody2D.velocity = Vector2.zero;
 		}
 	}
 

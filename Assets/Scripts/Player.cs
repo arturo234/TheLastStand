@@ -2,13 +2,14 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class Player : MonoBehaviour {
-	public float health, moveSpeed, ammo, ammoLimit;
+public class Player : GenericCharacter {
+	public float moveSpeed, ammo, ammoLimit;
 	public Text text;
 	public GameObject playerArrow;
 	Vector3 mousePosition, diff, translate;
-	public float arrowVelocity;
-	public Vector3 theta, arrowDir;
+
+    public ObjectPool projectilePool;
+
 	public float minX; //left boundary 
 	public float maxX; //right boundary 
 	public float minY; // up boundary 
@@ -19,6 +20,10 @@ public class Player : MonoBehaviour {
 		//set initial health
 		health = 10;
 		ammo = 3;
+        arrowVelocity = 10f;
+
+        if (projectilePool == null)
+            projectilePool = new ObjectPool(playerArrow, false, 16);
 	}
 	
 	// Update is called once per frame
@@ -46,8 +51,12 @@ public class Player : MonoBehaviour {
 		{
 			if(ammo > 0)
 			{
-				Instantiate(playerArrow, transform.position, transform.rotation);
-				playerArrow.rigidbody2D.velocity = arrowDir * arrowVelocity;
+                GameObject arrow = projectilePool.PullObject();
+                arrow.transform.position = transform.position;
+                arrow.transform.rotation = transform.rotation;
+                arrow.GetComponent<BasicProjectile>().SpawnArrow(Time.time, (GenericCharacter)this, projectilePool);
+                arrow.SetActive(true);
+                arrow.rigidbody2D.AddRelativeForce(new Vector2(Mathf.Cos(theta.z * Mathf.PI / 180), Mathf.Sin(theta.z * Mathf.PI / 180)) * .1f);
 				ammo--;
 			}
 			else
@@ -68,6 +77,7 @@ public class Player : MonoBehaviour {
 		
 		float rotation = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg;
 		transform.rotation = Quaternion.Euler(0f, 0f, rotation);
+        arrowDir = transform.rotation.eulerAngles;
 	}
 	
 	private void Move()
@@ -104,6 +114,13 @@ public class Player : MonoBehaviour {
 			Destroy(col.gameObject);
 		}
 	}
+
+    public override void DestroyProjectile(GameObject objToDestroy)
+    {
+        objToDestroy.rigidbody2D.velocity = Vector2.zero;
+        projectilePool.PushObject(objToDestroy.gameObject.GetComponent(typeof(IPoolableObject)) as IPoolableObject);
+    }
+
 	public void BoundaryCheck() 
 	{ 
 			
