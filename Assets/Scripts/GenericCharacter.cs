@@ -28,8 +28,10 @@ using System.Collections;
 		projectilePool.PushObject(objToDestroy.gameObject.GetComponent(typeof(IPoolableObject)) as IPoolableObject);
 	}
 		
-	public virtual void OnColliderEnter2D(Collider col) {}
-	
+	public virtual void OnColliderEnter2D(Collider2D col) {}
+
+	public virtual void OnTriggerEnter2D(Collider2D col) {}
+
 
 }
 

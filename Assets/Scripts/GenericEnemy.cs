@@ -32,11 +32,16 @@ public class GenericEnemy : GenericCharacter {
 
 
 	
-	public override void OnColliderEnter2D(Collider col) 
+	public override void OnTriggerEnter2D(Collider2D col) 
     {
         if (!col.tag.Equals("Enemy")) //Incase of non hero hits. 
             // Messy, there will be an internal Action to handle objects going back to the pool OnDisable
             DestroyProjectile(col.gameObject);
+		if (col.gameObject.tag.Equals("PlayerArrow")) 
+		{
+			health--;
+			DestroyProjectile(col.gameObject);
+		}
 	}
 
    

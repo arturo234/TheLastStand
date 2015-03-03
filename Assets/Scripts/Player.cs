@@ -3,26 +3,61 @@ using System.Collections;
 using UnityEngine.UI;
 
 public class Player : MonoBehaviour {
-	public float health, moveSpeed;
+	public float health, moveSpeed, ammo, ammoLimit;
 	public Text text;
-
+	public GameObject playerArrow;
 	Vector3 mousePosition, diff, translate;
+	public float arrowVelocity;
+	public Vector3 theta, arrowDir;
+	public float minX; //left boundary 
+	public float maxX; //right boundary 
+	public float minY; // up boundary 
+	public float maxY; // down boundary
 
 	// Use this for initialization
 	void Start () {
-	
+		//set initial health
+		health = 10;
+		ammo = 3;
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		Move();
 		RotateToMouse();
-
-		if(Input.GetKey (KeyCode.R) || health <= 0) {				//Replace with an actual trigger i.e. Death
+		BoundaryCheck();
+		if(Input.GetKey (KeyCode.R) || health <= 0) {
+			//Replace with an actual trigger i.e. Death
+			//change code to jump to game over
+			Application.LoadLevel("GameOver");
 			resetPlayer();
 		}
-
+		//catch arrow
+		if (Input.GetKeyDown(KeyCode.E))///and arrow is in range
+		{
+			if(ammo <= ammoLimit )
+			{
+				//Destroy(arrow);
+				ammo++;
+			}
+		}
+		//fire arrow
+		if (Input.GetKeyDown(KeyCode.Space))
+		{
+			if(ammo > 0)
+			{
+				Instantiate(playerArrow, transform.position, transform.rotation);
+				playerArrow.rigidbody2D.velocity = arrowDir * arrowVelocity;
+				ammo--;
+			}
+			else
+			{
+				Debug.Log("Out of ammo");
+			}
+		}
+	
 		text.text = "Lives: " + health;
+
 	}
 	
 	private void RotateToMouse()
@@ -45,8 +80,63 @@ public class Player : MonoBehaviour {
 		transform.position += translate * moveSpeed * Time.deltaTime;
 	}
 
+	public void Catch()
+	{
+
+
+	}
+
 	private void resetPlayer() {
 		var spawnpoint = GameObject.FindWithTag ("Respawn").transform;
 		transform.position = spawnpoint.position;
+		//set initial health
+		health = 10;
 	}
+	///cause player damage (collision with box collider)
+	public void OnTriggerEnter2D(Collider2D col) {
+		// This collision detection SHOULD BE WORKING, I tested it with a local object I made myself
+		// but it doesn't seem to be working with the assets. For now I kept a placeholder
+		// name "Arrow" which I uh, tried before and didn't work. 
+		// Also tested using key inputs and taking damage works.
+		if (col.gameObject.tag.Equals("EnemyArrow")) 
+		{
+			health--;
+			Destroy(col.gameObject);
+		}
+	}
+	public void BoundaryCheck() 
+	{ 
+
+		if (transform.position.x < minX) 
+		{ 
+			Vector3 temp = transform.position;
+			temp.x = minX; 
+			transform.position = temp; 
+
+		} 
+		if (transform.position.x > maxX) 
+		{ 
+			Vector3 temp = transform.position;
+			temp.x = maxX; 
+			transform.position = temp; 
+
+		}
+		
+		if (transform.position.y < minY) 
+		{ 
+			Vector3 temp = transform.position;
+			temp.y = minY; 
+			transform.position = temp; 
+
+		} 
+		if (transform.position.y > maxY) 
+		{ 
+			Vector3 temp = transform.position;
+			temp.y = maxY; 
+			transform.position = temp; 
+
+		}
+		
+	}
+
 }
