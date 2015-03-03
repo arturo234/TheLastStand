@@ -106,37 +106,12 @@ public class Player : MonoBehaviour {
 	}
 	public void BoundaryCheck() 
 	{ 
+			
+			float xboundary = Mathf.Clamp(transform.position.x,minX,maxX);
+			float yboundary = Mathf.Clamp(transform.position.y,minY,maxY);
+		    transform.position = new Vector3 (xboundary, yboundary, 0);
 
-		if (transform.position.x < minX) 
-		{ 
-			Vector3 temp = transform.position;
-			temp.x = minX; 
-			transform.position = temp; 
-
-		} 
-		if (transform.position.x > maxX) 
-		{ 
-			Vector3 temp = transform.position;
-			temp.x = maxX; 
-			transform.position = temp; 
-
-		}
-		
-		if (transform.position.y < minY) 
-		{ 
-			Vector3 temp = transform.position;
-			temp.y = minY; 
-			transform.position = temp; 
-
-		} 
-		if (transform.position.y > maxY) 
-		{ 
-			Vector3 temp = transform.position;
-			temp.y = maxY; 
-			transform.position = temp; 
-
-		}
-		
+	
+	
 	}
-
 }
