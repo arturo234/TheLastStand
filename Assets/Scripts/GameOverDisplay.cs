@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class GameOverDisplay : MonoBehaviour {
-
+	// Test comment
 	// Use this for initialization
 	void Start () {
 	
