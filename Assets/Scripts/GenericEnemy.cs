@@ -55,6 +55,8 @@ public class GenericEnemy : GenericCharacter {
 		if (col.gameObject.tag.Equals("PlayerArrow")) 
 		{
 			health--;
+			//causes arrow to stick, cleans up after enough arrows have been
+			//shot by player.
             col.rigidbody2D.velocity = Vector2.zero;
 		}
 	}

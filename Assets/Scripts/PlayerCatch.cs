@@ -5,9 +5,11 @@ public class PlayerCatch : MonoBehaviour {
 
 	//get script from parent class (Player.cs)
 	Player playerScript;
+	GenericEnemy enemyScript;
 	// Use this for initialization
 	void Start () {
 		playerScript = transform.parent.GetComponent<Player>();
+
 	}
 	
 	// Update is called once per frame

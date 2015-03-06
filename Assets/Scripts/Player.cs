@@ -8,7 +8,7 @@ public class Player : GenericCharacter {
 	public GameObject playerArrow;
 	Vector3 mousePosition, diff, translate;
 
-    public ObjectPool projectilePool;
+    public ObjectPool playerProjectilePool;
 
 	public float minX; //left boundary 
 	public float maxX; //right boundary 
@@ -23,8 +23,8 @@ public class Player : GenericCharacter {
 		//ammo = 3;
         arrowVelocity = 10f;
 
-        if (projectilePool == null)
-            projectilePool = new ObjectPool(playerArrow, false, 16);
+        if (playerProjectilePool == null)
+            playerProjectilePool = new ObjectPool(playerArrow, false, 16);
 	}
 	
 	// Update is called once per frame
@@ -44,10 +44,10 @@ public class Player : GenericCharacter {
 		{
 			if(ammo > 0)
 			{
-                GameObject arrow = projectilePool.PullObject();
+                GameObject arrow = playerProjectilePool.PullObject();
                 arrow.transform.position = transform.position;
                 arrow.transform.rotation = transform.rotation;
-                arrow.GetComponent<BasicProjectile>().SpawnArrow(Time.time, (GenericCharacter)this, projectilePool);
+                arrow.GetComponent<BasicProjectile>().SpawnArrow(Time.time, (GenericCharacter)this, playerProjectilePool);
                 arrow.SetActive(true);
                 arrow.rigidbody2D.AddRelativeForce(new Vector2(Mathf.Cos(theta.z * Mathf.PI / 180), Mathf.Sin(theta.z * Mathf.PI / 180)) * .1f);
 				ammo--;
@@ -103,6 +103,7 @@ public class Player : GenericCharacter {
 		// Also tested using key inputs and taking damage works.
 		if (col.gameObject.tag.Equals("EnemyArrow")) 
 		{
+
 			health--;
 			DestroyProjectile(col.gameObject);
 		}
@@ -110,8 +111,9 @@ public class Player : GenericCharacter {
 
     public override void DestroyProjectile(GameObject objToDestroy)
     {
+
         objToDestroy.rigidbody2D.velocity = Vector2.zero;
-        projectilePool.PushObject(objToDestroy.gameObject.GetComponent(typeof(IPoolableObject)) as IPoolableObject);
+        playerProjectilePool.PushObject(objToDestroy.gameObject.GetComponent(typeof(IPoolableObject)) as IPoolableObject);
     }
 
 	public void BoundaryCheck() 

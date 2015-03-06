@@ -39,6 +39,7 @@ public class BasicProjectile : MonoBehaviour, IPoolableObject
         }
 	}
 
+
     public void SpawnArrow(double time, GenericCharacter entity, ObjectPool pool)
     {
         
@@ -51,5 +52,6 @@ public class BasicProjectile : MonoBehaviour, IPoolableObject
     public void RemoveArrow()
     {
         firingEntity.DestroyProjectile(this.gameObject);
+
     }
 }
