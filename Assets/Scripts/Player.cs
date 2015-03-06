@@ -19,7 +19,8 @@ public class Player : GenericCharacter {
 	void Start () {
 		//set initial health
 		health = 10;
-		ammo = 3;
+		/// starting ammo can be set in inspector
+		//ammo = 3;
         arrowVelocity = 10f;
 
         if (projectilePool == null)
@@ -37,15 +38,7 @@ public class Player : GenericCharacter {
 			Application.LoadLevel("GameOver");
 			resetPlayer();
 		}
-		//catch arrow
-		if (Input.GetKeyDown(KeyCode.E))///and arrow is in range
-		{
-			if(ammo <= ammoLimit )
-			{
-				//Destroy(arrow);
-				ammo++;
-			}
-		}
+
 		//fire arrow
 		if (Input.GetKeyDown(KeyCode.Space))
 		{
@@ -111,7 +104,7 @@ public class Player : GenericCharacter {
 		if (col.gameObject.tag.Equals("EnemyArrow")) 
 		{
 			health--;
-			Destroy(col.gameObject);
+			DestroyProjectile(col.gameObject);
 		}
 	}
 
