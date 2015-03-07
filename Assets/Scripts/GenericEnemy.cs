@@ -39,6 +39,7 @@ public class GenericEnemy : GenericCharacter {
         arrow.GetComponent<BasicProjectile>().SpawnArrow(Time.time, this, projectilePool);
         arrow.SetActive(true);
         arrow.rigidbody2D.velocity = arrowDir * arrowVelocity;
+	
     }
 
     public override void DestroyProjectile(GameObject objToDestroy)

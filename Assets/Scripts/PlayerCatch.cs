@@ -22,9 +22,13 @@ public class PlayerCatch : MonoBehaviour {
 			if(playerScript.ammo <= playerScript.ammoLimit )
 			{
 
-				playerScript.DestroyProjectile(col.gameObject);
+				col.rigidbody2D.velocity = Vector2.zero;
 				playerScript.ammo++;
 				Debug.Log("Arrow Caught. New Ammo is :"+ playerScript.ammo);
+			}
+			else
+			{
+				Debug.Log("Ammo is full");
 			}
 		}
 	}

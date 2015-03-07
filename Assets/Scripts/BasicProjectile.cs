@@ -37,6 +37,12 @@ public class BasicProjectile : MonoBehaviour, IPoolableObject
             active = false;
             
         }
+		if (this.rigidbody2D.velocity.Equals(0) && active)
+		{
+			firingEntity.DestroyProjectile(this.gameObject);
+			active = false;
+			
+		}
 	}
 
 

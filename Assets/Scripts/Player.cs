@@ -83,11 +83,6 @@ public class Player : GenericCharacter {
 		transform.position += translate * moveSpeed * Time.deltaTime;
 	}
 
-	public void Catch()
-	{
-
-
-	}
 
 	private void resetPlayer() {
 		var spawnpoint = GameObject.FindWithTag ("Respawn").transform;
@@ -97,15 +92,13 @@ public class Player : GenericCharacter {
 	}
 	///cause player damage (collision with box collider)
 	public void OnTriggerEnter2D(Collider2D col) {
-		// This collision detection SHOULD BE WORKING, I tested it with a local object I made myself
-		// but it doesn't seem to be working with the assets. For now I kept a placeholder
-		// name "Arrow" which I uh, tried before and didn't work. 
-		// Also tested using key inputs and taking damage works.
+
 		if (col.gameObject.tag.Equals("EnemyArrow")) 
 		{
 
 			health--;
-			DestroyProjectile(col.gameObject);
+			col.rigidbody2D.velocity = Vector2.zero;
+			//DestroyProjectile(col.gameObject);
 		}
 	}
 
