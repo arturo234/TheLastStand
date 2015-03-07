@@ -8,7 +8,7 @@ public class Player : GenericCharacter {
 	public GameObject playerArrow;
 	Vector3 mousePosition, diff, translate;
 
-    public ObjectPool projectilePool;
+    public ObjectPool playerProjectilePool;
 
 	public float minX; //left boundary 
 	public float maxX; //right boundary 
@@ -19,11 +19,12 @@ public class Player : GenericCharacter {
 	void Start () {
 		//set initial health
 		health = 10;
-		ammo = 3;
+		/// starting ammo can be set in inspector
+		//ammo = 3;
         arrowVelocity = 10f;
 
-        if (projectilePool == null)
-            projectilePool = new ObjectPool(playerArrow, false, 16);
+        if (playerProjectilePool == null)
+            playerProjectilePool = new ObjectPool(playerArrow, false, 16);
 	}
 	
 	// Update is called once per frame
@@ -37,24 +38,16 @@ public class Player : GenericCharacter {
 			Application.LoadLevel("GameOver");
 			resetPlayer();
 		}
-		//catch arrow
-		if (Input.GetKeyDown(KeyCode.E))///and arrow is in range
-		{
-			if(ammo <= ammoLimit )
-			{
-				//Destroy(arrow);
-				ammo++;
-			}
-		}
+
 		//fire arrow
 		if (Input.GetKeyDown(KeyCode.Space))
 		{
 			if(ammo > 0)
 			{
-                GameObject arrow = projectilePool.PullObject();
+                GameObject arrow = playerProjectilePool.PullObject();
                 arrow.transform.position = transform.position;
                 arrow.transform.rotation = transform.rotation;
-                arrow.GetComponent<BasicProjectile>().SpawnArrow(Time.time, (GenericCharacter)this, projectilePool);
+                arrow.GetComponent<BasicProjectile>().SpawnArrow(Time.time, (GenericCharacter)this, playerProjectilePool);
                 arrow.SetActive(true);
                 arrow.rigidbody2D.AddRelativeForce(new Vector2(Mathf.Cos(theta.z * Mathf.PI / 180), Mathf.Sin(theta.z * Mathf.PI / 180)) * .1f);
 				ammo--;
@@ -90,11 +83,6 @@ public class Player : GenericCharacter {
 		transform.position += translate * moveSpeed * Time.deltaTime;
 	}
 
-	public void Catch()
-	{
-
-
-	}
 
 	private void resetPlayer() {
 		var spawnpoint = GameObject.FindWithTag ("Respawn").transform;
@@ -104,21 +92,21 @@ public class Player : GenericCharacter {
 	}
 	///cause player damage (collision with box collider)
 	public void OnTriggerEnter2D(Collider2D col) {
-		// This collision detection SHOULD BE WORKING, I tested it with a local object I made myself
-		// but it doesn't seem to be working with the assets. For now I kept a placeholder
-		// name "Arrow" which I uh, tried before and didn't work. 
-		// Also tested using key inputs and taking damage works.
+
 		if (col.gameObject.tag.Equals("EnemyArrow")) 
 		{
+
 			health--;
-			Destroy(col.gameObject);
+			col.rigidbody2D.velocity = Vector2.zero;
+			//DestroyProjectile(col.gameObject);
 		}
 	}
 
     public override void DestroyProjectile(GameObject objToDestroy)
     {
+
         objToDestroy.rigidbody2D.velocity = Vector2.zero;
-        projectilePool.PushObject(objToDestroy.gameObject.GetComponent(typeof(IPoolableObject)) as IPoolableObject);
+        playerProjectilePool.PushObject(objToDestroy.gameObject.GetComponent(typeof(IPoolableObject)) as IPoolableObject);
     }
 
 	public void BoundaryCheck() 

@@ -35,13 +35,20 @@ public class BasicProjectile : MonoBehaviour, IPoolableObject
         {
             firingEntity.DestroyProjectile(this.gameObject);
             active = false;
-            Debug.Log("Arrow destroyed!");
+            
         }
+		if (this.rigidbody2D.velocity.Equals(0) && active)
+		{
+			firingEntity.DestroyProjectile(this.gameObject);
+			active = false;
+			
+		}
 	}
+
 
     public void SpawnArrow(double time, GenericCharacter entity, ObjectPool pool)
     {
-        Debug.Log("Arrow fired!");
+        
         timeSpawned = time;
         currentTime = 0f;
         active = true;
@@ -51,5 +58,6 @@ public class BasicProjectile : MonoBehaviour, IPoolableObject
     public void RemoveArrow()
     {
         firingEntity.DestroyProjectile(this.gameObject);
+
     }
 }

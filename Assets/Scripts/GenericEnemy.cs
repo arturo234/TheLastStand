@@ -39,6 +39,7 @@ public class GenericEnemy : GenericCharacter {
         arrow.GetComponent<BasicProjectile>().SpawnArrow(Time.time, this, projectilePool);
         arrow.SetActive(true);
         arrow.rigidbody2D.velocity = arrowDir * arrowVelocity;
+	
     }
 
     public override void DestroyProjectile(GameObject objToDestroy)
@@ -55,6 +56,8 @@ public class GenericEnemy : GenericCharacter {
 		if (col.gameObject.tag.Equals("PlayerArrow")) 
 		{
 			health--;
+			//causes arrow to stick, cleans up after enough arrows have been
+			//shot by player.
             col.rigidbody2D.velocity = Vector2.zero;
 		}
 	}
