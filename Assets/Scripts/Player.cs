@@ -16,11 +16,7 @@ public class Player : GenericCharacter {
 
 	// Use this for initialization
 	void Start () {
-		//set initial health
-		health = 10;
-		/// starting ammo can be set in inspector
-		//ammo = 3;
-        arrowVelocity = 10f;
+
 	}
 	
 	// Update is called once per frame
@@ -40,10 +36,12 @@ public class Player : GenericCharacter {
 		{
 			if(ammo > 0)
 			{
+				arrowDir = new Vector3 (Mathf.Cos(transform.rotation.z), Mathf.Sin(transform.rotation.z), 0);
 				arrow = ObjectPool.instance.GetObjectForType("BasicProjectile", false);
 				arrow.transform.position = transform.position;
 				arrow.transform.rotation = transform.rotation;
 				arrow.rigidbody2D.velocity = arrowDir * arrowVelocity;
+
 				arrow.tag = "PlayerArrow";
 				ammo--;
 			}

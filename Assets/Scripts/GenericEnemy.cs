@@ -20,7 +20,6 @@ public class GenericEnemy : GenericCharacter {
 		if (currentTime >= fireRate) 
         {
 			arrow = ObjectPool.instance.GetObjectForType("BasicProjectile", false);
-			Debug.Log(ObjectPool.instance.pooledObjects);
 			arrow.transform.position = transform.position;
 			arrow.transform.rotation = transform.rotation;
 			arrow.rigidbody2D.velocity = arrowDir * arrowVelocity;
