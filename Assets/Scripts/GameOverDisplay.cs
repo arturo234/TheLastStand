@@ -4,22 +4,12 @@ using System.Collections;
 public class GameOverDisplay : MonoBehaviour {
 	// Test comment
 	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () 
+	public void OnClickRetry()
 	{
-		if(Input.GetKey (KeyCode.R)) 
-		{
-			Application.LoadLevel("BasicLevel");
-		}
+		Application.LoadLevel("BasicLevel");
 	}
-	void OnGUI()
+	public void OnClickQuit()
 	{
-		GUI.Label (new Rect (200, 200, 100, 100), "Game Over-Press R to restart");
-		//GUI.Label (new Rect (100, 150, 100, 30), "Score: " + (int)(playerScore * 100));
-		
+		Application.Quit ();
 	}
 }
