@@ -36,7 +36,7 @@ public class Player : GenericCharacter {
 		{
 			if(ammo > 0)
 			{
-				arrowDir = new Vector3 (Mathf.Cos(transform.rotation.z), Mathf.Sin(transform.rotation.z), 0);
+				arrowDir = new Vector3(Mathf.Cos(transform.eulerAngles.z * Mathf.PI/180), Mathf.Sin(transform.eulerAngles.z * Mathf.PI/180));
 				arrow = ObjectPool.instance.GetObjectForType("BasicProjectile", false);
 				arrow.transform.position = transform.position;
 				arrow.transform.rotation = transform.rotation;

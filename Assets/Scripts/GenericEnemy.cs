@@ -10,6 +10,7 @@ public class GenericEnemy : GenericCharacter {
     {
 		theta = new Vector3(0, 0, Random.value*360);
 		arrowDir = new Vector3 (Mathf.Cos(theta.z * Mathf.PI / 180), Mathf.Sin(theta.z * Mathf.PI / 180));
+		Debug.Log (arrowDir);
 		transform.Rotate(theta);
 	}
 
