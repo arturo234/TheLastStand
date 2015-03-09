@@ -10,6 +10,7 @@ public class GenericEnemy : GenericCharacter {
     {
 		theta = new Vector3(0, 0, Random.value*360);
 		arrowDir = new Vector3 (Mathf.Cos(theta.z * Mathf.PI / 180), Mathf.Sin(theta.z * Mathf.PI / 180));
+		Debug.Log (arrowDir);
 		transform.Rotate(theta);
 	}
 
@@ -20,7 +21,6 @@ public class GenericEnemy : GenericCharacter {
 		if (currentTime >= fireRate) 
         {
 			arrow = ObjectPool.instance.GetObjectForType("BasicProjectile", false);
-			Debug.Log(ObjectPool.instance.pooledObjects);
 			arrow.transform.position = transform.position;
 			arrow.transform.rotation = transform.rotation;
 			arrow.rigidbody2D.velocity = arrowDir * arrowVelocity;
