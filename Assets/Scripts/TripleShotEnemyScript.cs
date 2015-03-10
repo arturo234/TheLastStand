@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class GenericEnemyScript : MonoBehaviour {
+public class TripleShotEnemyScript : MonoBehaviour {
 	
 	public double health, fireRate;
 	public float arrowVelocity;
@@ -24,9 +24,9 @@ public class GenericEnemyScript : MonoBehaviour {
 	void Update () {
 		currentTime += Time.deltaTime;
 		if (currentTime >= fireRate) {
-			GameObject centerarrow = (GameObject)Instantiate(arrowPrefab, transform.position, transform.rotation);
-			GameObject leftarrow = (GameObject)Instantiate(arrowPrefab, transform.position, transform.rotation);
-			GameObject rightarrow = (GameObject)Instantiate(arrowPrefab, transform.position, transform.rotation);
+			GameObject centerarrow = ObjectPool.instance.GetObjectForType("Center Projectile", false);
+			GameObject leftarrow = ObjectPool.instance.GetObjectForType("Left Projectile", false);
+			GameObject rightarrow = ObjectPool.instance.GetObjectForType("Right Projectile", false);
 			centerarrow.rigidbody2D.velocity = arrowDir * arrowVelocity;
 			leftarrow.rigidbody2D.velocity = arrowDirLeft * arrowVelocity;
 			righttarrow.rigidbody2D.velocity = arrowDirRight * arrowVelocity;
