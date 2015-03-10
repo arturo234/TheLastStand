@@ -18,4 +18,5 @@ public class SpawnPoint : MonoBehaviour {
 			EnemyCheck = true;
 		}
 	}
+
 }

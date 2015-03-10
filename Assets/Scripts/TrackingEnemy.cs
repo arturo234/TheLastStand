@@ -27,6 +27,10 @@ public class TrackingEnemy : GenericCharacter {
 			//The arrow will only have to time out and kill itself.
 			
 		}
+		if (health <= 0) 
+		{
+			Destroy(this.gameObject);
+		}
 	}
 	
 	//Rotate to face a player

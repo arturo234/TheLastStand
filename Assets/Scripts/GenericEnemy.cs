@@ -8,9 +8,10 @@ public class GenericEnemy : GenericCharacter {
 	// Use this for initialization
 	void Start () 
 	{
+		//this.transform.position.z
 		theta = new Vector3(0, 0, 0);//z value controls rotation, 0 is facing to the right
 		arrowDir = new Vector3 (Mathf.Cos(theta.z * Mathf.PI / 180), Mathf.Sin(theta.z * Mathf.PI / 180));
-		transform.Rotate(theta);
+		//transform.Rotate(theta);
 	}
 	
 	// Update is called once per frame
@@ -28,6 +29,10 @@ public class GenericEnemy : GenericCharacter {
 			//All the arrow prefab needs is a rigidBody2D with everything 0'd out.
 			//The arrow will only have to time out and kill itself.
 			
+		}
+		if (health <= 0) 
+		{
+			Destroy(this.gameObject);
 		}
 	}
 	
