@@ -3,25 +3,14 @@ using System.Collections;
 
 public class BasicProjectile : MonoBehaviour, IPoolableObject 
 {
-    public GameObject gameObject
-    {
-        get
-        {
-            return this.transform.gameObject;
-        }
-    }
-
     private double timeSpawned;
     private double selfDestructTime;
     private double currentTime;
-
-    private GenericCharacter firingEntity;
 
 	// Use this for initialization
 	void Start () 
     {
         selfDestructTime = 3.0f;
-	
 	}
 	
 	// Update is called once per frame
@@ -30,15 +19,13 @@ public class BasicProjectile : MonoBehaviour, IPoolableObject
         currentTime += Time.deltaTime;
         if (currentTime + timeSpawned >= timeSpawned + selfDestructTime)
         {
-            firingEntity.DestroyProjectile(this.gameObject);
+			RemoveArrow();
         }
 	}
 
-    public void SpawnArrow(double time, GenericCharacter entity)
+    public void RemoveArrow()
     {
-        timeSpawned = time;
-        currentTime = 0f;
-
-        firingEntity = entity;
+		Destroy(this.gameObject);
+		//ObjectPool.instance.PoolObject(gameObject);
     }
 }

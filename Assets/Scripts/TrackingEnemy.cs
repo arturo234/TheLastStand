@@ -1,23 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class GenericEnemy : GenericCharacter {
-	
+public class TrackingEnemy : GenericCharacter {
+	Vector3 playerPosition, diff;
 	GameObject arrow;
+	float rotation;
 	
-	// Use this for initialization
-	void Start () 
-	{
-		//this.transform.position.z
-		theta = new Vector3(0, 0, 0);//z value controls rotation, 0 is facing to the right
-		arrowDir = new Vector3 (Mathf.Cos(theta.z * Mathf.PI / 180), Mathf.Sin(theta.z * Mathf.PI / 180));
-		//transform.Rotate(theta);
-	}
 	
 	// Update is called once per frame
 	void Update () 
 	{
+		RotateToPlayer ();
+		theta = new Vector3(0, 0, rotation);//z value controls rotation, 0 is facing to the right
+		arrowDir = new Vector3 (Mathf.Cos(theta.z * Mathf.PI / 180), Mathf.Sin(theta.z * Mathf.PI / 180));
 		currentTime += Time.deltaTime;
+		
 		if (currentTime >= fireRate) 
 		{
 			arrow = ObjectPool.instance.GetObjectForType("BasicProjectile", false);
@@ -35,6 +32,22 @@ public class GenericEnemy : GenericCharacter {
 			Destroy(this.gameObject);
 		}
 	}
+	
+	//Rotate to face a player
+	private void RotateToPlayer()
+	{
+		GameObject player = GameObject.Find("Player");
+		Transform playerTransform = player.transform;
+		// get player position
+		playerPosition = playerTransform.position;
+		playerPosition = new Vector3(playerPosition.x, playerPosition.y, 0);
+		diff = playerPosition - transform.position;
+		diff.Normalize();
+		rotation = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg;
+		transform.rotation = Quaternion.Euler(0f, 0f, rotation);
+		
+	}
+	
 	
 	public void OnTriggerEnter2D(Collider2D col) 
 	{
@@ -54,3 +67,5 @@ public class GenericEnemy : GenericCharacter {
 	
 	
 }
+
+

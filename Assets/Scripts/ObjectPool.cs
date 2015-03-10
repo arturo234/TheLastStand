@@ -2,59 +2,99 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class ObjectPool 
+public class ObjectPool : MonoBehaviour
 {
+	public static ObjectPool instance;
 
-    Stack<IPoolableObject> pool;
+	public GameObject[] objectPrefabs;
 
-    public GameObject objReference;
-    public bool canGrow;
-    public int poolSize;
-        
-    public ObjectPool(GameObject reference, bool grow, int size)
-    {
-        objReference = reference;
-        canGrow = grow;
-        poolSize = size;
+	public List<GameObject>[] pooledObjects;
 
-        pool = new Stack<IPoolableObject>();
-        for(int i = 0; i < poolSize; i++)
-        {
-            pool.Push(CreateObject());
-        }
-    }
+	public int[] amountToBuffer;
+	
+	public int defaultBufferAmount = 3;
 
-    IPoolableObject CreateObject()
-    {
-        GameObject obj = GameObject.Instantiate(objReference) as GameObject;
-        obj.SetActive(false);
+	protected GameObject containerObject;
+	
+	void Awake ()
+	{
+		instance = this;
+	}
+	
+	// Use this for initialization
+	void Start ()
+	{
+		containerObject = new GameObject("ObjectPool");
+		
+		//Loop through the object prefabs and make a new list for each one.
+		//We do this because the pool can only support prefabs set to it in the editor,
+		//so we can assume the lists of pooled objects are in the same order as object prefabs in the array
+		pooledObjects = new List<GameObject>[objectPrefabs.Length];
+		
+		int i = 0;
+		foreach ( GameObject objectPrefab in objectPrefabs )
+		{
+			pooledObjects[i] = new List<GameObject>(); 
+			
+			int bufferAmount;
+			
+			if(i < amountToBuffer.Length) bufferAmount = amountToBuffer[i];
+			else
+				bufferAmount = defaultBufferAmount;
+			
+			for ( int n=0; n<bufferAmount; n++)
+			{
+				GameObject newObj = Instantiate(objectPrefab) as GameObject;
+				newObj.name = objectPrefab.name;
+				PoolObject(newObj);
+			}
+			
+			i++;
+		}
+	}
 
-        IPoolableObject pooledObj = obj.GetComponent(typeof(IPoolableObject)) as IPoolableObject;
-        if (pooledObj == null)
-            Debug.LogError("No pooled object for " + obj.name, obj);
+	public GameObject GetObjectForType ( string objectType , bool onlyPooled )
+	{
+		for(int i=0; i<objectPrefabs.Length; i++)
+		{
+			GameObject prefab = objectPrefabs[i];
+			if(prefab.name == objectType)
+			{
+				
+				if(pooledObjects[i].Count > 0)
+				{
+					GameObject pooledObject = pooledObjects[i][0];
+					pooledObjects[i].RemoveAt(0);
+					pooledObject.transform.parent = null;
+					pooledObject.SetActiveRecursively(true);
+					
+					return pooledObject;
+					
+				} else if(!onlyPooled) {
+					return Instantiate(objectPrefabs[i]) as GameObject;
+				}
+				
+				break;
+				
+			}
+		}
+		
+		//If we have gotten here either there was no object of the specified type or non were left in the pool with onlyPooled set to true
+		return null;
+	}
 
-        return pooledObj;
-    }
-
-    public void PushObject(IPoolableObject obj)
-    {
-        pool.Push(obj);
-    }
-
-    public GameObject PullObject()
-    {  
-        if (pool.Count == 0)
-        {
-            Debug.LogWarning("Pool is empty!");
-            if(canGrow)
-            {
-                poolSize++;
-                GameObject createdObj = CreateObject().gameObject;
-                return createdObj;
-            }
-            return null;
-        }
-        IPoolableObject obj = pool.Pop();
-        return obj.gameObject;
-    }
+	public void PoolObject ( GameObject obj )
+	{
+		for ( int i=0; i<objectPrefabs.Length; i++)
+		{
+			if(objectPrefabs[i].name == obj.name)
+			{
+				obj.SetActiveRecursively(false);
+				obj.transform.parent = containerObject.transform;
+				pooledObjects[i].Add(obj);
+				return;
+			}
+		}
+	}
+	
 }
