@@ -3,7 +3,6 @@ using System.Collections;
 
 public class TrackingEnemy : GenericCharacter {
 	Vector3 playerPosition, diff;
-	GameObject arrow;
 	float rotation;
 	
 	
@@ -12,24 +11,16 @@ public class TrackingEnemy : GenericCharacter {
 	{
 		RotateToPlayer ();
 		theta = new Vector3(0, 0, rotation);//z value controls rotation, 0 is facing to the right
-		arrowDir = new Vector3 (Mathf.Cos(theta.z * Mathf.PI / 180), Mathf.Sin(theta.z * Mathf.PI / 180));
 		currentTime += Time.deltaTime;
 		
 		if (currentTime >= fireRate) 
 		{
-			arrow = ObjectPool.instance.GetObjectForType("BasicProjectile", false);
-			arrow.transform.position = transform.position;
-			arrow.transform.rotation = transform.rotation;
-			arrow.rigidbody2D.velocity = arrowDir * arrowVelocity;
-			arrow.tag = "EnemyArrow";
-			currentTime = 0;
-			//All the arrow prefab needs is a rigidBody2D with everything 0'd out.
-			//The arrow will only have to time out and kill itself.
-			
+			fireArrow();
+			currentTime = 0;			
 		}
 		if (health <= 0) 
 		{
-			Destroy(this.gameObject);
+			RePool(this.gameObject);
 		}
 	}
 	
@@ -55,12 +46,7 @@ public class TrackingEnemy : GenericCharacter {
 		if (col.gameObject.tag.Equals("PlayerArrow")) 
 		{
 			health--;
-			
-			//Destroy(col.gameObject);
-			ObjectPool.instance.PoolObject(col.gameObject);
-			//causes arrow to stick, cleans up after enough arrows have been
-			//shot by player.
-			//col.rigidbody2D.velocity = Vector2.zero;
+			RePool(col.gameObject);
 		}
 	}
 	
