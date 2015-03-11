@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class BasicProjectile : MonoBehaviour, IPoolableObject 
+public class BasicProjectile : MonoBehaviour
 {
     private double timeSpawned;
     private double selfDestructTime;
@@ -19,13 +19,14 @@ public class BasicProjectile : MonoBehaviour, IPoolableObject
         currentTime += Time.deltaTime;
         if (currentTime + timeSpawned >= timeSpawned + selfDestructTime)
         {
+			currentTime = 0;
 			RemoveArrow();
         }
 	}
 
     public void RemoveArrow()
     {
-		Destroy(this.gameObject);
-		//ObjectPool.instance.PoolObject(gameObject);
+		this.gameObject.tag = "";
+		ObjectPool.instance.PoolObject(this.gameObject);
     }
 }

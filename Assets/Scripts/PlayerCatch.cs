@@ -23,7 +23,7 @@ public class PlayerCatch : MonoBehaviour {
 		{
 			if(playerScript.ammo <= playerScript.ammoLimit )
 			{
-				Destroy(col.gameObject);
+				ObjectPool.instance.PoolObject(col.gameObject);
 				playerScript.ammo++;
 				Debug.Log("Arrow Caught. New Ammo is :"+ playerScript.ammo);
 			}

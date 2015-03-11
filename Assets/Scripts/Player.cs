@@ -7,12 +7,10 @@ public class Player : GenericCharacter {
 	public Text text;
 	Vector3 mousePosition, diff, translate;
 
-	GameObject arrow;
-
 	public float minX; //left boundary 
 	public float maxX; //right boundary 
-	public float minY; // up boundary 
-	public float maxY; // down boundary
+	public float minY; //up boundary 
+	public float maxY; //down boundary
 
 	// Use this for initialization
 	void Start () {
@@ -36,11 +34,7 @@ public class Player : GenericCharacter {
 		{
 			if(ammo > 0)
 			{
-				arrowDir = new Vector3(Mathf.Cos(transform.eulerAngles.z * Mathf.PI/180), Mathf.Sin(transform.eulerAngles.z * Mathf.PI/180));
-				arrow = ObjectPool.instance.GetObjectForType("BasicProjectile", false);
-				arrow.transform.position = transform.position;
-				arrow.transform.rotation = transform.rotation;
-				arrow.rigidbody2D.velocity = arrowDir * arrowVelocity;
+				fireArrow();
 
 				arrow.tag = "PlayerArrow";
 				ammo--;
@@ -52,7 +46,6 @@ public class Player : GenericCharacter {
 		}
 	
 		text.text = "Lives: " + health;
-
 	}
 	
 	private void RotateToMouse()
@@ -67,11 +60,8 @@ public class Player : GenericCharacter {
 	}
 	
 	private void Move()
-	{
-		float h = Input.GetAxisRaw("Horizontal");
-		float v = Input.GetAxisRaw("Vertical");
-		
-		translate = new Vector3(h, v, 0);
+	{		
+		translate = new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"), 0);
 		translate = translate.normalized;
 		transform.position += translate * moveSpeed * Time.deltaTime;
 	}
@@ -85,23 +75,18 @@ public class Player : GenericCharacter {
 	}
 
 	///cause player damage (collision with box collider)
-	/*public void OnTriggerEnter2D(Collider2D col) {
-
+	public void OnCollisionEnter2D(Collision2D col) {
 		if (col.gameObject.tag.Equals("EnemyArrow")) 
 		{
 			health--;
-			Destroy(col.gameObject);
-			//ObjectPool.instance.PoolObject(col.gameObject);
-			//col.rigidbody2D.velocity = Vector2.zero;
-			//DestroyProjectile(col.gameObject);
+			RePool(col.gameObject);
 		}
-	}*/
+	}
 
 	public void BoundaryCheck() 
 	{ 
-			
-			float xboundary = Mathf.Clamp(transform.position.x,minX,maxX);
-			float yboundary = Mathf.Clamp(transform.position.y,minY,maxY);
-		    transform.position = new Vector3 (xboundary, yboundary, 0);
+		float xboundary = Mathf.Clamp(transform.position.x,minX,maxX);
+		float yboundary = Mathf.Clamp(transform.position.y,minY,maxY);
+		transform.position = new Vector3 (xboundary, yboundary, 0);
 	}
 }
