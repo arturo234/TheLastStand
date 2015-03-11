@@ -8,6 +8,7 @@ public class PlayerCatch : MonoBehaviour {
 	GenericEnemy enemyScript;
 	// Use this for initialization
 	void Start () {
+		renderer.enabled = false;//makes catch radius invisible
 		playerScript = transform.parent.GetComponent<Player>();
 
 	}
@@ -17,7 +18,8 @@ public class PlayerCatch : MonoBehaviour {
 
 	}
 	public void OnTriggerStay2D(Collider2D col){
-		if (col.gameObject.tag.Equals("EnemyArrow")&&Input.GetKeyDown(KeyCode.C)) 
+		//catches on click of right mouse button or spacebar
+		if (col.gameObject.tag.Equals("EnemyArrow")&&(Input.GetMouseButtonDown(1)||Input.GetKeyDown(KeyCode.LeftShift)))
 		{
 			if(playerScript.ammo <= playerScript.ammoLimit )
 			{

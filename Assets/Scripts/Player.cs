@@ -31,8 +31,8 @@ public class Player : GenericCharacter {
 			resetPlayer();
 		}
 
-		//fire arrow
-		if (Input.GetKeyDown(KeyCode.Space))
+		//fire arrow on left mouse button or spacebar press
+		if (Input.GetMouseButtonDown(0)||Input.GetKeyDown(KeyCode.Space))
 		{
 			if(ammo > 0)
 			{
@@ -85,7 +85,7 @@ public class Player : GenericCharacter {
 	}
 
 	///cause player damage (collision with box collider)
-	public void OnTriggerEnter2D(Collider2D col) {
+	/*public void OnTriggerEnter2D(Collider2D col) {
 
 		if (col.gameObject.tag.Equals("EnemyArrow")) 
 		{
@@ -95,7 +95,7 @@ public class Player : GenericCharacter {
 			//col.rigidbody2D.velocity = Vector2.zero;
 			//DestroyProjectile(col.gameObject);
 		}
-	}
+	}*/
 
 	public void BoundaryCheck() 
 	{ 

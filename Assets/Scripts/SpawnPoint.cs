@@ -8,6 +8,8 @@ public class SpawnPoint : MonoBehaviour {
 	private float Timer;
 
 	void  Start (){
+		//makes spawnpoints invisible during gameplay
+		renderer.enabled = false;
 		Timer = Time.time + 5;
 	}
 
