@@ -84,7 +84,7 @@ public class Player : GenericCharacter {
 	}
 
 	///cause player damage (collision with box collider)
-	public void OnTriggerEnter2D(Collider2D col) {
+	public void OnCollisionEnter2D(Collision2D col) {
 		if (col.gameObject.tag.Equals("EnemyArrow")) 
 		{
 			health--;

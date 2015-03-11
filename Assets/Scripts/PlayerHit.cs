@@ -18,16 +18,11 @@ public class PlayerHit : MonoBehaviour {
 
 	}
 	public void OnTriggerEnter2D(Collider2D col) {
-		
 		if (col.gameObject.tag.Equals("EnemyArrow")) 
 		{
 			Debug.Log("Damage Taken!");
-			//playerScript.health--;
-			//Destroy(col.gameObject);
-			//ObjectPool.instance.PoolObject(col.gameObject);
-			//col.rigidbody2D.velocity = Vector2.zero;
-			//DestroyProjectile(col.gameObject);
+			playerScript.health--;
+			ObjectPool.instance.PoolObject(col.gameObject);
 		}
 	}
-
 }
