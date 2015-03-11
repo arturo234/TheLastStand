@@ -16,6 +16,7 @@ public class TrackingEnemy : GenericCharacter {
 		if (currentTime >= fireRate) 
 		{
 			fireArrow();
+			arrow.tag = "EnemyArrow";
 			currentTime = 0;			
 		}
 		if (health <= 0) 
