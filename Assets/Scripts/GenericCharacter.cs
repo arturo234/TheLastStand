@@ -14,6 +14,11 @@ public class GenericCharacter : MonoBehaviour
     // Shared projectile object pool for all generic characters
 
 	protected void RePool(GameObject obj) {
+		//added to fix issues with projectiles being repooled
+		if (obj.name =="BasicProjectile") 
+		{
+			this.gameObject.tag = "";
+		}
 		ObjectPool.instance.PoolObject(obj);
 	}
 

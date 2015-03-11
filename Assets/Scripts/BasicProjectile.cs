@@ -29,4 +29,5 @@ public class BasicProjectile : MonoBehaviour
 		this.gameObject.tag = "";
 		ObjectPool.instance.PoolObject(this.gameObject);
     }
+
 }
