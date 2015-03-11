@@ -22,8 +22,8 @@ public class PlayerHit : MonoBehaviour {
 		if (col.gameObject.tag.Equals("EnemyArrow")) 
 		{
 			Debug.Log("Damage Taken!");
-			playerScript.health--;
-			Destroy(col.gameObject);
+			//playerScript.health--;
+			//Destroy(col.gameObject);
 			//ObjectPool.instance.PoolObject(col.gameObject);
 			//col.rigidbody2D.velocity = Vector2.zero;
 			//DestroyProjectile(col.gameObject);

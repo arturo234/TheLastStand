@@ -11,8 +11,8 @@ public class Player : GenericCharacter {
 
 	public float minX; //left boundary 
 	public float maxX; //right boundary 
-	public float minY; // up boundary 
-	public float maxY; // down boundary
+	public float minY; //up boundary 
+	public float maxY; //down boundary
 
 	// Use this for initialization
 	void Start () {
@@ -52,7 +52,6 @@ public class Player : GenericCharacter {
 		}
 	
 		text.text = "Lives: " + health;
-
 	}
 	
 	private void RotateToMouse()
@@ -85,23 +84,18 @@ public class Player : GenericCharacter {
 	}
 
 	///cause player damage (collision with box collider)
-	/*public void OnTriggerEnter2D(Collider2D col) {
-
+	public void OnTriggerEnter2D(Collider2D col) {
 		if (col.gameObject.tag.Equals("EnemyArrow")) 
 		{
 			health--;
-			Destroy(col.gameObject);
-			//ObjectPool.instance.PoolObject(col.gameObject);
-			//col.rigidbody2D.velocity = Vector2.zero;
-			//DestroyProjectile(col.gameObject);
+			ObjectPool.instance.PoolObject(col.gameObject);
 		}
-	}*/
+	}
 
 	public void BoundaryCheck() 
 	{ 
-			
-			float xboundary = Mathf.Clamp(transform.position.x,minX,maxX);
-			float yboundary = Mathf.Clamp(transform.position.y,minY,maxY);
-		    transform.position = new Vector3 (xboundary, yboundary, 0);
+		float xboundary = Mathf.Clamp(transform.position.x,minX,maxX);
+		float yboundary = Mathf.Clamp(transform.position.y,minY,maxY);
+		transform.position = new Vector3 (xboundary, yboundary, 0);
 	}
 }
