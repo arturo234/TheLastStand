@@ -29,8 +29,8 @@ public class Player : GenericCharacter {
 			resetPlayer();
 		}
 
-		//fire arrow on left mouse button or spacebar press
-		if (Input.GetMouseButtonDown(0)||Input.GetKeyDown(KeyCode.Space))
+		//"Fire1" is the left mouse button, left ctrl, or gamepad button 0 (A button on xbox360 remote)
+		if (Input.GetButtonDown("Fire1"))//(Input.GetMouseButtonDown(0)||Input.GetKeyDown(KeyCode.Space))
 		{
 			if(ammo > 0)
 			{
@@ -59,17 +59,32 @@ public class Player : GenericCharacter {
 	
 	private void RotateToMouse()
 	{
-		mousePosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0);
-		diff = Camera.main.ScreenToWorldPoint(mousePosition) - transform.position;
-		diff.Normalize();
-		
-		float rotation = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg;
-		transform.rotation = Quaternion.Euler(0f, 0f, rotation);
-        arrowDir = transform.rotation.eulerAngles;
+		float rotation;
+		float x = Input.GetAxis("JoystickX");
+		float y = Input.GetAxis("JoystickY");
+		if (x != 0.0 || y != 0.0)
+		{
+			rotation = Mathf.Atan2(y, x) * Mathf.Rad2Deg;
+			//transform.rotation = Quaternion.AngleAxis(90.0 - angle, Vector3.up);
+			transform.rotation = Quaternion.Euler(0f, 0f, rotation);
+			arrowDir = transform.rotation.eulerAngles;
+		}
+		else
+		{
+			mousePosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0);
+
+			diff = Camera.main.ScreenToWorldPoint(mousePosition) - transform.position;
+			diff.Normalize();
+			
+			rotation = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg;
+			transform.rotation = Quaternion.Euler(0f, 0f, rotation);
+			arrowDir = transform.rotation.eulerAngles;
+		}
 	}
 	
 	private void Move()
-	{		
+	{	
+		///works with both keyboard and gamepad
 		translate = new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"), 0);
 		translate = translate.normalized;
 		transform.position += translate * moveSpeed * Time.deltaTime;

@@ -18,8 +18,8 @@ public class PlayerCatch : MonoBehaviour {
 
 	}
 	public void OnTriggerStay2D(Collider2D col){
-		//catches on click of right mouse button or spacebar
-		if (col.gameObject.tag.Equals("EnemyArrow")&&(Input.GetMouseButtonDown(1)||Input.GetKeyDown(KeyCode.LeftShift)))
+		//catches on "Fire2" press, which is right mouse button, alt, or gamepad button 1 (B on xbox 360 remote)
+		if (col.gameObject.tag.Equals("EnemyArrow")&&(Input.GetButtonDown("Fire2")))//(Input.GetMouseButtonDown(1)||Input.GetKeyDown(KeyCode.LeftShift)))
 		{
 			if(playerScript.ammo < playerScript.ammoLimit )
 			{
