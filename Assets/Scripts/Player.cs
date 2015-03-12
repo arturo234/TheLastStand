@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class Player : GenericCharacter {
 	public float moveSpeed, ammo, ammoLimit;
-	public Text text;
+	public Text liveUI, ammoUI;
 	Vector3 mousePosition, diff, translate;
 
 	public float minX; //left boundary 
@@ -43,8 +43,8 @@ public class Player : GenericCharacter {
 				Debug.Log("Out of ammo");
 			}
 		}
-	
-		text.text = "Lives: " + health;
+		ammoUI.text = "Ammo: " + ammo;
+		liveUI.text = "Lives: " + health;
 	}
 	
 	private void RotateToMouse()
