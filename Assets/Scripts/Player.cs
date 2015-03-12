@@ -35,7 +35,6 @@ public class Player : GenericCharacter {
 			if(ammo > 0)
 			{
 				fireArrow();
-
 				arrow.tag = "PlayerArrow";
 				ammo--;
 			}
