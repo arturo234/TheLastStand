@@ -21,7 +21,7 @@ public class PlayerCatch : MonoBehaviour {
 		//catches on click of right mouse button or spacebar
 		if (col.gameObject.tag.Equals("EnemyArrow")&&(Input.GetMouseButtonDown(1)||Input.GetKeyDown(KeyCode.LeftShift)))
 		{
-			if(playerScript.ammo <= playerScript.ammoLimit )
+			if(playerScript.ammo < playerScript.ammoLimit )
 			{
 				ObjectPool.instance.PoolObject(col.gameObject);
 				playerScript.ammo++;
