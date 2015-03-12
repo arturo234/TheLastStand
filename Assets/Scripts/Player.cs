@@ -45,6 +45,16 @@ public class Player : GenericCharacter {
 		}
 		ammoUI.text = "Ammo: " + ammo;
 		liveUI.text = "Lives: " + health;
+		////////////////////////////////////////////cheat codes!
+		if (Input.GetKey (KeyCode.F) && Input.GetKey (KeyCode.H)) 
+		{
+			health = 1000;
+		}
+		if (Input.GetKey (KeyCode.F) && Input.GetKey (KeyCode.B)) 
+		{
+			ammo = 1000;
+		}
+		/////////////////////////////////////////////////////////
 	}
 	
 	private void RotateToMouse()
