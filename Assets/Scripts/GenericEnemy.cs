@@ -25,10 +25,11 @@ public class GenericEnemy : GenericCharacter {
 
 		if (health <= 0) 
 		{
+			health = 1;
 			RePool(this.gameObject);
 		}
 	}
-	
+
 	public void OnTriggerEnter2D(Collider2D col) 
 	{
 		if (col.tag == "EnemyArrow") return;
@@ -38,6 +39,7 @@ public class GenericEnemy : GenericCharacter {
 			RePool(col.gameObject);
 		}
 	}
+
 	public void Raycast()
 	{
 		//draws enemy line of sight in debug scene view
