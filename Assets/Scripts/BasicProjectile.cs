@@ -10,7 +10,7 @@ public class BasicProjectile : MonoBehaviour
 	// Use this for initialization
 	void Start () 
     {
-        selfDestructTime = 3.0f;
+        selfDestructTime = 5.0f;
 	}
 	
 	// Update is called once per frame
