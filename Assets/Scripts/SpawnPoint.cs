@@ -7,7 +7,7 @@ public class SpawnPoint : MonoBehaviour {
 	public float delay;
 	private bool EnemyCheck = false;
 	private float Timer;
-	private GameObject gameObject;
+	private GameObject spawnedObject;
 
 	void  Start (){
 		//makes spawnpoints invisible during gameplay
@@ -17,13 +17,13 @@ public class SpawnPoint : MonoBehaviour {
 
 	void  Update (){
 		if (Timer < Time.time && !EnemyCheck) { // check if real time has caught up with timer
-			gameObject = ObjectPool.instance.GetObjectForType(spawnEnemy.name, true);
-			if(gameObject == null) {
+			spawnedObject = ObjectPool.instance.GetObjectForType(spawnEnemy.name, true);
+			if(spawnedObject == null) {
 				Timer += 2;
 			} else {
-				gameObject.transform.position = transform.position;
-				gameObject.transform.rotation = transform.rotation;
-				Debug.Log(gameObject.transform.position);
+				spawnedObject.transform.position = transform.position;
+				spawnedObject.transform.rotation = transform.rotation;
+				Debug.Log(spawnedObject.transform.position);
 				EnemyCheck = true;
 			}
 		}
