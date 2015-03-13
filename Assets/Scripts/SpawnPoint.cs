@@ -17,12 +17,15 @@ public class SpawnPoint : MonoBehaviour {
 
 	void  Update (){
 		if (Timer < Time.time && !EnemyCheck) { // check if real time has caught up with timer
-			gameObject = ObjectPool.instance.GetObjectForType(spawnEnemy.name, false);
-			gameObject.transform.position = transform.position;
-			gameObject.transform.rotation = transform.rotation;
-			Timer = Time.time + delay;
-			EnemyCheck = true;
+			gameObject = ObjectPool.instance.GetObjectForType(spawnEnemy.name, true);
+			if(gameObject == null) {
+				Timer += 2;
+			} else {
+				gameObject.transform.position = transform.position;
+				gameObject.transform.rotation = transform.rotation;
+				Debug.Log(gameObject.transform.position);
+				EnemyCheck = true;
+			}
 		}
 	}
-
 }
