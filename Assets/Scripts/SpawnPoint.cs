@@ -26,7 +26,8 @@ public class SpawnPoint : MonoBehaviour {
 			spawnedObject = ObjectPool.instance.GetObjectForType(spawnEnemy.name, true);
 			if(spawnedObject == null) {
 				Timer += 2;
-			} else {
+			} 
+			else {
 				spawnedObject.transform.position = transform.position;
 				spawnedObject.transform.rotation = transform.rotation;
 				Debug.Log(spawnedObject.transform.position);
