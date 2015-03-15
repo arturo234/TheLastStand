@@ -4,27 +4,17 @@ using UnityEngine.UI;
 
 public class Player : GenericCharacter {
 	public float moveSpeed, ammo, ammoLimit;
-	public Text text;
-	public GameObject playerArrow;
+	public Text liveUI, ammoUI;
 	Vector3 mousePosition, diff, translate;
-
-    public ObjectPool playerProjectilePool;
 
 	public float minX; //left boundary 
 	public float maxX; //right boundary 
-	public float minY; // up boundary 
-	public float maxY; // down boundary
+	public float minY; //up boundary 
+	public float maxY; //down boundary
 
 	// Use this for initialization
 	void Start () {
-		//set initial health
-		health = 10;
-		/// starting ammo can be set in inspector
-		//ammo = 3;
-        arrowVelocity = 10f;
 
-        if (playerProjectilePool == null)
-            playerProjectilePool = new ObjectPool(playerArrow, false, 16);
 	}
 	
 	// Update is called once per frame
@@ -39,17 +29,13 @@ public class Player : GenericCharacter {
 			resetPlayer();
 		}
 
-		//fire arrow
-		if (Input.GetKeyDown(KeyCode.Space))
+		//"Fire1" is the left mouse button, left ctrl, or gamepad button 0 (A button on xbox360 remote)
+		if (Input.GetButtonDown("Fire1"))//(Input.GetMouseButtonDown(0)||Input.GetKeyDown(KeyCode.Space))
 		{
 			if(ammo > 0)
 			{
-                GameObject arrow = playerProjectilePool.PullObject();
-                arrow.transform.position = transform.position;
-                arrow.transform.rotation = transform.rotation;
-                arrow.GetComponent<BasicProjectile>().SpawnArrow(Time.time, (GenericCharacter)this, playerProjectilePool);
-                arrow.SetActive(true);
-                arrow.rigidbody2D.AddRelativeForce(new Vector2(Mathf.Cos(theta.z * Mathf.PI / 180), Mathf.Sin(theta.z * Mathf.PI / 180)) * .1f);
+				fireArrow();
+				arrow.tag = "PlayerArrow";
 				ammo--;
 			}
 			else
@@ -57,28 +43,49 @@ public class Player : GenericCharacter {
 				Debug.Log("Out of ammo");
 			}
 		}
-	
-		text.text = "Lives: " + health;
-
+		ammoUI.text = "Ammo: " + ammo;
+		liveUI.text = "Lives: " + health;
+		////////////////////////////////////////////cheat codes!
+		if (Input.GetKey (KeyCode.F) && Input.GetKey (KeyCode.H)) 
+		{
+			health = 1000;
+		}
+		if (Input.GetKey (KeyCode.F) && Input.GetKey (KeyCode.B)) 
+		{
+			ammo = 1000;
+		}
+		/////////////////////////////////////////////////////////
 	}
 	
 	private void RotateToMouse()
 	{
-		mousePosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0);
-		diff = Camera.main.ScreenToWorldPoint(mousePosition) - transform.position;
-		diff.Normalize();
-		
-		float rotation = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg;
-		transform.rotation = Quaternion.Euler(0f, 0f, rotation);
-        arrowDir = transform.rotation.eulerAngles;
+		float rotation;
+		float x = Input.GetAxis("JoystickX");
+		float y = Input.GetAxis("JoystickY");
+		if (x != 0.0 || y != 0.0)
+		{
+			rotation = Mathf.Atan2(y, x) * Mathf.Rad2Deg;
+			//transform.rotation = Quaternion.AngleAxis(90.0 - angle, Vector3.up);
+			transform.rotation = Quaternion.Euler(0f, 0f, rotation);
+			arrowDir = transform.rotation.eulerAngles;
+		}
+		else
+		{
+			mousePosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0);
+
+			diff = Camera.main.ScreenToWorldPoint(mousePosition) - transform.position;
+			diff.Normalize();
+			
+			rotation = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg;
+			transform.rotation = Quaternion.Euler(0f, 0f, rotation);
+			arrowDir = transform.rotation.eulerAngles;
+		}
 	}
 	
 	private void Move()
-	{
-		float h = Input.GetAxisRaw("Horizontal");
-		float v = Input.GetAxisRaw("Vertical");
-		
-		translate = new Vector3(h, v, 0);
+	{	
+		///works with both keyboard and gamepad
+		translate = new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"), 0);
 		translate = translate.normalized;
 		transform.position += translate * moveSpeed * Time.deltaTime;
 	}
@@ -90,33 +97,20 @@ public class Player : GenericCharacter {
 		//set initial health
 		health = 10;
 	}
-	///cause player damage (collision with box collider)
-	public void OnTriggerEnter2D(Collider2D col) {
 
+	///cause player damage (collision with box collider)
+	public void OnCollisionEnter2D(Collision2D col) {
 		if (col.gameObject.tag.Equals("EnemyArrow")) 
 		{
-
 			health--;
-			col.rigidbody2D.velocity = Vector2.zero;
-			//DestroyProjectile(col.gameObject);
+			RePool(col.gameObject);
 		}
 	}
 
-    public override void DestroyProjectile(GameObject objToDestroy)
-    {
-
-        objToDestroy.rigidbody2D.velocity = Vector2.zero;
-        playerProjectilePool.PushObject(objToDestroy.gameObject.GetComponent(typeof(IPoolableObject)) as IPoolableObject);
-    }
-
 	public void BoundaryCheck() 
 	{ 
-			
-			float xboundary = Mathf.Clamp(transform.position.x,minX,maxX);
-			float yboundary = Mathf.Clamp(transform.position.y,minY,maxY);
-		    transform.position = new Vector3 (xboundary, yboundary, 0);
-
-	
-	
+		float xboundary = Mathf.Clamp(transform.position.x,minX,maxX);
+		float yboundary = Mathf.Clamp(transform.position.y,minY,maxY);
+		transform.position = new Vector3 (xboundary, yboundary, 0);
 	}
 }
