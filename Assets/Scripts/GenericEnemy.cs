@@ -18,8 +18,7 @@ public class GenericEnemy : GenericCharacter {
 		currentTime += Time.deltaTime;
 		if (currentTime >= fireRate && playerInSight) 
 		{
-			fireArrow();
-			arrow.tag = "EnemyArrow";
+			fireArrow("EnemyArrow");
 			currentTime = 0;
 		}
 
