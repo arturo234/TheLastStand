@@ -130,4 +130,5 @@ public class Player : GenericCharacter {
 		if(ammo > 0)
 			ammo += difference;
 	}
+
 }
