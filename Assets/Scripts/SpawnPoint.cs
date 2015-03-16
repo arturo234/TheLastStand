@@ -30,7 +30,6 @@ public class SpawnPoint : MonoBehaviour {
 			else {
 				spawnedObject.transform.position = transform.position;
 				spawnedObject.transform.rotation = transform.rotation;
-				Debug.Log(spawnedObject.transform.position);
 				EnemyCheck = true;
 				sPosition = new Vector2(spawnedObject.transform.position.x, spawnedObject.
 				                        transform.position.y);

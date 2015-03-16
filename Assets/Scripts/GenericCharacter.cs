@@ -23,12 +23,13 @@ public class GenericCharacter : MonoBehaviour
 		ObjectPool.instance.PoolObject(obj);
 	}
 
-	protected void fireArrow() {
+	protected void fireArrow(string tag) {
 		arrow = ObjectPool.instance.GetObjectForType("BasicProjectile", true);
 		arrow.transform.position = transform.position;
 		arrow.transform.rotation = transform.rotation;
 		arrowDir = new Vector3(Mathf.Cos(transform.eulerAngles.z * Mathf.PI/180), Mathf.Sin(transform.eulerAngles.z * Mathf.PI/180));
 		arrow.rigidbody2D.velocity = arrowDir * arrowVelocity;
+		arrow.tag = tag;
 	}
 
 	void OnEnable() {
