@@ -6,11 +6,17 @@ public class GameOverDisplay : MonoBehaviour {
 	// Use this for initialization
 	public void OnClickRetry()
 	{
-		//Application.LoadLevel("BasicLevel");
-		Application.LoadLevel("LevelSelectMenu");
+		Application.LoadLevel("BasicLevel");
+		//needs to look @ PlayerPrefs and load where player died last
 	}
 	public void OnClickQuit()
 	{
 		Application.Quit ();
 	}
+	public void onClickSelect()
+	{
+		Application.LoadLevel ("LevelSelectMenu");
+	}
 }
+
+
