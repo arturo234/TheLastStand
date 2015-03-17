@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class BasicProjectile : MonoBehaviour, IPoolableObject 
+public class BasicProjectile : MonoBehaviour
 {
     private double timeSpawned;
     private double selfDestructTime;
@@ -10,7 +10,7 @@ public class BasicProjectile : MonoBehaviour, IPoolableObject
 	// Use this for initialization
 	void Start () 
     {
-        selfDestructTime = 3.0f;
+        selfDestructTime = 5.0f;
 	}
 	
 	// Update is called once per frame
@@ -19,13 +19,19 @@ public class BasicProjectile : MonoBehaviour, IPoolableObject
         currentTime += Time.deltaTime;
         if (currentTime + timeSpawned >= timeSpawned + selfDestructTime)
         {
+			currentTime = 0;
 			RemoveArrow();
         }
 	}
 
     public void RemoveArrow()
     {
-		Destroy(this.gameObject);
-		//ObjectPool.instance.PoolObject(gameObject);
+		this.gameObject.tag = "";
+		ObjectPool.instance.PoolObject(this.gameObject);
     }
+	public void OnTriggerEnter2D(Collider2D other)
+	{
+		if (other.name.Equals ("Obstacle"))
+			RemoveArrow ();
+	}
 }

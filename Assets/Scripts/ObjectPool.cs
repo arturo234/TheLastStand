@@ -1,11 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
-using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 
 public class ObjectPool : MonoBehaviour
 {
+	
 	public static ObjectPool instance;
 
 	public GameObject[] objectPrefabs;
@@ -54,7 +53,20 @@ public class ObjectPool : MonoBehaviour
 			i++;
 		}
 	}
-
+	
+	/// <summary>
+	/// Gets a new object for the name type provided.  If no object type exists or if onlypooled is true and there is no objects of that type in the pool
+	/// then null will be returned.
+	/// </summary>
+	/// <returns>
+	/// The object for type.
+	/// </returns>
+	/// <param name='objectType'>
+	/// Object type.
+	/// </param>
+	/// <param name='onlyPooled'>
+	/// If true, it will only return an object if there is one currently pooled.
+	/// </param>
 	public GameObject GetObjectForType ( string objectType , bool onlyPooled )
 	{
 		for(int i=0; i<objectPrefabs.Length; i++)
@@ -62,13 +74,12 @@ public class ObjectPool : MonoBehaviour
 			GameObject prefab = objectPrefabs[i];
 			if(prefab.name == objectType)
 			{
-				
 				if(pooledObjects[i].Count > 0)
 				{
 					GameObject pooledObject = pooledObjects[i][0];
 					pooledObjects[i].RemoveAt(0);
 					pooledObject.transform.parent = null;
-					pooledObject.SetActiveRecursively(true);
+					pooledObject.SetActive(true);
 					
 					return pooledObject;
 					
@@ -84,14 +95,20 @@ public class ObjectPool : MonoBehaviour
 		//If we have gotten here either there was no object of the specified type or non were left in the pool with onlyPooled set to true
 		return null;
 	}
-
-	public void PoolObject ( GameObject obj )
+	
+	/// <summary>
+	/// Pools the object specified.  Will not be pooled if there is no prefab of that type.
+	/// </summary>
+	/// <param name='obj'>
+	/// Object to be pooled.
+	/// </param>
+	public void PoolObject (GameObject obj)
 	{
 		for ( int i=0; i<objectPrefabs.Length; i++)
 		{
 			if(objectPrefabs[i].name == obj.name)
 			{
-				obj.SetActiveRecursively(false);
+				obj.SetActive(false);
 				obj.transform.parent = containerObject.transform;
 				pooledObjects[i].Add(obj);
 				return;
