@@ -7,7 +7,7 @@ public class GameOverDisplay : MonoBehaviour {
 	public void OnClickRetry()
 	{
 		//Application.LoadLevel("BasicLevel");
-		Application.LoadLevel("Level5-Temple");
+		Application.LoadLevel("LevelSelectMenu");
 	}
 	public void OnClickQuit()
 	{
