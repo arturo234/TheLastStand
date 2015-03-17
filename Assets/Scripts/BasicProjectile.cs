@@ -31,7 +31,7 @@ public class BasicProjectile : MonoBehaviour
     }
 	public void OnTriggerEnter2D(Collider2D other)
 	{
-		if (other.name.Equals ("Obstacle"))
+		if (other.tag.Equals ("Obstacle"))
 			RemoveArrow ();
 	}
 }
