@@ -4,7 +4,10 @@ using UnityEngine.UI;
 
 public class Player : GenericCharacter {
 	public float moveSpeed, ammo, ammoLimit;
-	public Text liveUI, ammoUI;
+	public Text[] livesUI, ammosUI;
+	Text liveUI, ammoUI;
+	public GameObject controls;
+	Controls script;
 	Vector3 mousePosition, diff, translate;
 
 	public float minX; //left boundary 
@@ -14,7 +17,15 @@ public class Player : GenericCharacter {
 
 	// Use this for initialization
 	void Start () {
-
+		if (!Application.isMobilePlatform) {
+			liveUI = livesUI [0];
+			ammoUI = ammosUI [0];
+		} else {
+			liveUI = livesUI [1];
+			ammoUI = ammosUI [1];
+			ammo ++;
+		}
+		script = controls.transform.GetComponent<Controls>();
 	}
 	
 	// Update is called once per frame
@@ -32,16 +43,7 @@ public class Player : GenericCharacter {
 		//"Fire1" is the left mouse button, left ctrl, or gamepad button 0 (A button on xbox360 remote)
 		if (Input.GetButtonDown("Fire1"))//(Input.GetMouseButtonDown(0)||Input.GetKeyDown(KeyCode.Space))
 		{
-			if(ammo > 0)
-			{
-				fireArrow();
-				arrow.tag = "PlayerArrow";
-				ammo--;
-			}
-			else
-			{
-				Debug.Log("Out of ammo");
-			}
+			Fire();
 		}
 		ammoUI.text = "Ammo: " + ammo;
 		liveUI.text = "Lives: " + health;
@@ -60,11 +62,10 @@ public class Player : GenericCharacter {
 	private void RotateToMouse()
 	{
 		float rotation;
-		float x = Input.GetAxis("JoystickX");
-		float y = Input.GetAxis("JoystickY");
-		if (x != 0.0 || y != 0.0)
+		translate = script.getGamePadTranslate();
+		if (translate.x != 0.0 || translate.y != 0.0)
 		{
-			rotation = Mathf.Atan2(y, x) * Mathf.Rad2Deg;
+			rotation = Mathf.Atan2(translate.y, translate.x) * Mathf.Rad2Deg;
 			//transform.rotation = Quaternion.AngleAxis(90.0 - angle, Vector3.up);
 			transform.rotation = Quaternion.Euler(0f, 0f, rotation);
 			arrowDir = transform.rotation.eulerAngles;
@@ -85,8 +86,7 @@ public class Player : GenericCharacter {
 	private void Move()
 	{	
 		///works with both keyboard and gamepad
-		translate = new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"), 0);
-		translate = translate.normalized;
+		translate = script.getTranslate ();
 		transform.position += translate * moveSpeed * Time.deltaTime;
 	}
 
@@ -113,4 +113,22 @@ public class Player : GenericCharacter {
 		float yboundary = Mathf.Clamp(transform.position.y,minY,maxY);
 		transform.position = new Vector3 (xboundary, yboundary, 0);
 	}
+
+	public void Fire() {
+		if(ammo > 0)
+		{
+			fireArrow("PlayerArrow");
+			ammo--;
+		}
+		else
+		{
+			Debug.Log("Out of ammo");
+		}
+	}
+	
+	public void addAmmo(int difference) {
+		if(ammo > 0)
+			ammo += difference;
+	}
+
 }

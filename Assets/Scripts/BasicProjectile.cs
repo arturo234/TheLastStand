@@ -29,5 +29,9 @@ public class BasicProjectile : MonoBehaviour
 		this.gameObject.tag = "";
 		ObjectPool.instance.PoolObject(this.gameObject);
     }
-
+	public void OnTriggerEnter2D(Collider2D other)
+	{
+		if (other.tag.Equals ("Obstacle"))
+			RemoveArrow ();
+	}
 }
