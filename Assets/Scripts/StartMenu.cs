@@ -6,6 +6,6 @@ public class StartMenu : MonoBehaviour {
 	public void OnClickStart()
 	{
 		//Application.LoadLevel("BasicLevel");
-		Application.LoadLevel("LevelSelectMenu");
+		Application.LoadLevel("IntroCutScene");
 	}
 }
