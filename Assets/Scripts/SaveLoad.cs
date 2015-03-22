@@ -6,7 +6,8 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 
 public static class SaveLoad {
-	
+	//temporarily commented out for compiling
+	/*
 	public static List<Game> savedGames = new List<Game>();
 	
 	//it's static so we can call it from anywhere
@@ -18,7 +19,7 @@ public static class SaveLoad {
 		bf.Serialize(file, SaveLoad.savedGames);
 		file.Close();
 	}   
-	
+
 	public static void Load() {
 		if(File.Exists(Application.persistentDataPath + "/savedGames.gd")) {
 			BinaryFormatter bf = new BinaryFormatter();
@@ -27,4 +28,5 @@ public static class SaveLoad {
 			file.Close();
 		}
 	}
+	*/
 }
